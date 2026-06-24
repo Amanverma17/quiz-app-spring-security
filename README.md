@@ -1,3 +1,6 @@
+Here's the updated README with RBAC added and known limitations fixed:
+
+```
 # 📝 Quiz Application
 
 A RESTful Quiz Management API built with **Spring Boot**, secured with **JWT authentication**, and backed by **PostgreSQL**.
@@ -21,6 +24,7 @@ A RESTful Quiz Management API built with **Spring Boot**, secured with **JWT aut
 ## ✨ Features
 
 - JWT-based stateless authentication with BCrypt password hashing
+- Role-based access control (ADMIN / USER)
 - Question bank with category and difficulty filtering
 - Quiz creation via random question selection (native SQL query)
 - Quiz submission with automatic percentage scoring
@@ -63,18 +67,16 @@ src/main/java/com/quizapp/quizapplication/
 
 ## 📡 API Endpoints
 
-## 📡 API Endpoints
-
-| Method | Endpoint                       | Auth | Description                          |
-|--------|--------------------------------|------|--------------------------------------|
-| POST   | `/register`                    | ❌   | Register new user                    |
-| POST   | `/login`                       | ❌   | Login, receive JWT                   |
-| GET    | `/question/allQuestion`        | ✅   | Get all questions                    |
-| GET    | `/question/difficulty/{level}` | ✅   | Filter by difficulty                 |
-| POST   | `/question/add`                | ✅   | Add a question                       |
-| POST   | `/quiz/create`                 | ✅   | Create quiz (category, difficulty, count) |
-| GET    | `/quiz/get`                    | ✅   | Get quiz questions (no answers)      |
-| POST   | `/quiz/submit/{quizId}`        | ✅   | Submit answers, get score %          |
+| Method | Endpoint                       | Auth | Role  | Description                          |
+|--------|--------------------------------|------|-------|--------------------------------------|
+| POST   | `/register`                    | ❌   | -     | Register new user                    |
+| POST   | `/login`                       | ❌   | -     | Login, receive JWT                   |
+| GET    | `/question/allQuestion`        | ✅   | USER  | Get all questions                    |
+| GET    | `/question/difficulty/{level}` | ✅   | USER  | Filter by difficulty                 |
+| POST   | `/question/add`                | ✅   | ADMIN | Add a question                       |
+| POST   | `/quiz/create`                 | ✅   | ADMIN | Create quiz (category, difficulty, count) |
+| GET    | `/quiz/get`                    | ✅   | USER  | Get quiz questions (no answers)      |
+| POST   | `/quiz/submit/{quizId}`        | ✅   | USER  | Submit answers, get score %          |
 
 ---
 
@@ -94,6 +96,7 @@ spring.datasource.password=your_password
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+jwt.secret=your_jwt_secret_here
 ```
 
 ```bash
@@ -101,24 +104,17 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-App runs at `http://localhost:8080`
+App runs at `http://localhost:8080`  
 Swagger UI at `http://localhost:8080/swagger-ui/index.html`
-
----
-
-## ⚠️ Known Limitations
-
-- JWT secret regenerates on every restart — tokens invalidated after reboot. Fix: move secret to `application.properties`.
-- No RBAC — all authenticated users have equal access.
 
 ---
 
 ## 🛠️ Future Improvements
 
-- [ ] Persist JWT secret in config
-- [ ] Add ADMIN / USER roles
-- [ ] Fetch quiz by ID
+- [ ] Fetch quiz by ID instead of category + difficulty filter
+- [ ] Add quiz timer support
 - [ ] Dockerize with Docker Compose
+- [ ] Add unit and integration tests
 
 ---
 
@@ -128,3 +124,11 @@ Swagger UI at `http://localhost:8080/swagger-ui/index.html`
 - GitHub: [github.com/Amanverma17](https://github.com/Amanverma17)
 - LinkedIn: [linkedin.com/in/aman-verma-r-87601134b](https://linkedin.com/in/aman-verma-r-87601134b)
 - LeetCode: [amanverma17](https://leetcode.com/amanverma17)
+```
+
+**What changed:**
+- Added RBAC to Features section ✅
+- Added Role column to API Endpoints table ✅
+- Added `jwt.secret` to application.properties example ✅
+- Removed Known Limitations (since JWT bug is fixed and RBAC is done) ✅
+
