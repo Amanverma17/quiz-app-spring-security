@@ -106,12 +106,6 @@ Swagger UI at `http://localhost:8080/swagger-ui/index.html`
 
 ---
 
-## ⚠️ Known Limitations
-
-- JWT secret regenerates on every restart — tokens invalidated after reboot. Fix: move secret to `application.properties`.
-- No RBAC — all authenticated users have equal access.
-
----
 
 ## 🛠️ Future Improvements
 
