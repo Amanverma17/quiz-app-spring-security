@@ -1,4 +1,3 @@
-```
 # 📝 Quiz Application
 
 A RESTful Quiz Management API built with **Spring Boot**, secured with **JWT authentication**, and backed by **PostgreSQL**.
@@ -22,7 +21,6 @@ A RESTful Quiz Management API built with **Spring Boot**, secured with **JWT aut
 ## ✨ Features
 
 - JWT-based stateless authentication with BCrypt password hashing
-- Role-based access control (ADMIN / USER)
 - Question bank with category and difficulty filtering
 - Quiz creation via random question selection (native SQL query)
 - Quiz submission with automatic percentage scoring
@@ -63,44 +61,20 @@ src/main/java/com/quizapp/quizapplication/
 
 ---
 
-## 🔐 Security Architecture
-
-```
-Request → JwtFilter (OncePerRequestFilter)
-              ↓
-    Extract Bearer token from Authorization header
-              ↓
-    JWTservice.extractUsername(token)
-              ↓
-    UserDetailsService.loadUserByUsername()
-              ↓
-    JWTservice.validateToken()
-              ↓
-    Set Authentication in SecurityContextHolder
-              ↓
-    Proceed to Controller
-```
-
-- Passwords hashed with **BCrypt** on registration
-- **DaoAuthenticationProvider** wired with `UserDetailsService` + `BCryptPasswordEncoder`
-- Sessions are **STATELESS** — no `HttpSession` used
-- **CSRF disabled** (stateless JWT APIs don't need it)
-- Public endpoints: `/register`, `/login`, `/swagger-ui/**`, `/v3/api-docs/**`
-
----
+## 📡 API Endpoints
 
 ## 📡 API Endpoints
 
-| Method | Endpoint                       | Auth  | Role  | Description                          |
-|--------|--------------------------------|-------|-------|--------------------------------------|
-| POST   | `/register`                    | ❌    | -     | Register new user                    |
-| POST   | `/login`                       | ❌    | -     | Login, receive JWT                   |
-| GET    | `/question/allQuestion`        | ✅    | USER  | Get all questions                    |
-| GET    | `/question/difficulty/{level}` | ✅    | USER  | Filter by difficulty                 |
-| POST   | `/question/add`                | ✅    | ADMIN | Add a question                       |
-| POST   | `/quiz/create`                 | ✅    | ADMIN | Create quiz (category, difficulty, count) |
-| GET    | `/quiz/get`                    | ✅    | USER  | Get quiz questions (no answers)      |
-| POST   | `/quiz/submit/{quizId}`        | ✅    | USER  | Submit answers, get score %          |
+| Method | Endpoint                       | Auth | Description                          |
+|--------|--------------------------------|------|--------------------------------------|
+| POST   | `/register`                    | ❌   | Register new user                    |
+| POST   | `/login`                       | ❌   | Login, receive JWT                   |
+| GET    | `/question/allQuestion`        | ✅   | Get all questions                    |
+| GET    | `/question/difficulty/{level}` | ✅   | Filter by difficulty                 |
+| POST   | `/question/add`                | ✅   | Add a question                       |
+| POST   | `/quiz/create`                 | ✅   | Create quiz (category, difficulty, count) |
+| GET    | `/quiz/get`                    | ✅   | Get quiz questions (no answers)      |
+| POST   | `/quiz/submit/{quizId}`        | ✅   | Submit answers, get score %          |
 
 ---
 
@@ -120,7 +94,6 @@ spring.datasource.password=your_password
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-jwt.secret=your_jwt_secret_here
 ```
 
 ```bash
@@ -133,25 +106,19 @@ Swagger UI at `http://localhost:8080/swagger-ui/index.html`
 
 ---
 
-## 🔁 How It Works — End-to-End Flow
+## ⚠️ Known Limitations
 
-```
-1. POST /register       → Save user with BCrypt-encoded password
-2. POST /login          → Authenticate → receive JWT token (valid 1 hour)
-3. POST /question/add   → ADMIN adds questions (send JWT in Authorization: Bearer <token>)
-4. POST /quiz/create    → ADMIN creates quiz — randomly picks N questions
-5. GET  /quiz/get       → USER gets QuestionDTOs (no correct answer exposed)
-6. POST /quiz/submit    → USER submits answers → returns score %
-```
+- JWT secret regenerates on every restart — tokens invalidated after reboot. Fix: move secret to `application.properties`.
+- No RBAC — all authenticated users have equal access.
 
 ---
 
 ## 🛠️ Future Improvements
 
-- [ ] Fetch quiz by ID instead of category + difficulty filter
-- [ ] Add quiz timer support
+- [ ] Persist JWT secret in config
+- [ ] Add ADMIN / USER roles
+- [ ] Fetch quiz by ID
 - [ ] Dockerize with Docker Compose
-- [ ] Add unit and integration tests
 
 ---
 
@@ -161,4 +128,3 @@ Swagger UI at `http://localhost:8080/swagger-ui/index.html`
 - GitHub: [github.com/Amanverma17](https://github.com/Amanverma17)
 - LinkedIn: [linkedin.com/in/aman-verma-r-87601134b](https://linkedin.com/in/aman-verma-r-87601134b)
 - LeetCode: [amanverma17](https://leetcode.com/amanverma17)
-```
