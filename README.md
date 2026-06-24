@@ -130,3 +130,4 @@ Swagger UI at `http://localhost:8080/swagger-ui/index.html`
 - Added `jwt.secret` to application.properties example ✅
 - Removed Known Limitations (since JWT bug is fixed and RBAC is done) ✅
 
+
