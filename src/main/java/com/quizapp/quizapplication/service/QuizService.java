@@ -64,29 +64,27 @@ public class QuizService {
         return ResponseEntity.ok(questionsDTOList);
     }
 
-    public ResponseEntity<Integer> submitQuiz(Integer quizId, List<Response> responses) {
+    public ResponseEntity<String> submitQuiz(Integer quizId, List<Response> responses) {
 
         Quiz quiz = quizRepo.findById(quizId).get();
         List<Question> questions = quiz.getQuestions();
 
         int score = 0;
         int count = 0;
+
         for (Response r : responses) {
             for (Question q : questions) {
-
                 if (q.getId().equals(r.getQuestionId())) {
-
                     if (q.getCorrectAnswer().equals(r.getResponse())) {
                         score++;
                     }
-
                     break;
                 }
             }
             count++;
         }
-        int percentage= (score * 100) / count;
 
-        return ResponseEntity.ok(percentage);
+        int percentage = (score * 100) / count;
+        return ResponseEntity.ok("Marks Obtained: " + percentage + "%");
     }
 }
